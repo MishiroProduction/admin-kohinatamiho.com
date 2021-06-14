@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "esnext",
+    "module": "commonjs",
+    "target": "ESNext",
     "strict": true,
+    "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types", "type/*.d.ts"],
     "paths": {
       "@/*": [
         "src/*"
@@ -21,16 +24,9 @@
       "es2018",
       "es2019",
       "es2020",
-      "dom",
-      "esnext",
+      "ESNext",
       "dom"
     ]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.vue"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "includes": ["src/*/.ts"]
 }

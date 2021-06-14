@@ -1,5 +1,3 @@
-// https://eslint.org/docs/user-guide/configuring
-
 module.exports = {
   root: true,
   parser: 'vue-eslint-parser',
@@ -16,7 +14,6 @@ module.exports = {
     'plugin:vue/base',
     'plugin:vue/strongly-recommended',
     'prettier',
-    'prettier/vue',
   ],
   // required to lint *.vue files
   plugins: ['@typescript-eslint', 'vue'],
@@ -34,6 +31,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: false }],
-    '@typescript-eslint/member-delimiter-style': 'off'
+    '@typescript-eslint/member-delimiter-style': 'off',
+    'indent': ['error', 2]
   }
 }
