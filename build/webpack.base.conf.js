@@ -10,7 +10,6 @@ const resolve = (dir) => {
 }
 
 /* delete files */
-rm.sync(resolve('prod'))
 rm.sync(resolve('dist'))
 
 module.exports = {
