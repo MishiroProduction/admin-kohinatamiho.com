@@ -2,29 +2,26 @@ import axios from 'axios'
 import { API_BASE_URL } from '../../config/config'
 
 export interface SendCredential {
-  user_id: string
+  mail_address: string
   password: string
 }
 
-export interface SendPhotoData {
-  title: string
-  image: any[]
-  content: string
-}
-
-export interface LoginResponseSuccess {
+export interface LoginResponse {
   status: boolean
+  message: string
+  errors: null | Record<string, unknown>
   data: {
-    id: number
-    user_id: string
-    name: string
+    users: {
+      id: number
+      mail_address: string
+      user_name: string
+      status: boolean
+      role: number
+      created_at: string
+      updated_at: string
+    }
     access_token: string
   }
-}
-
-export interface LoginResponseError {
-  status: boolean
-  msg: string
 }
 
 export interface LogoutResponse {
@@ -35,10 +32,9 @@ export interface BearerAuthenticationResponseSuccess {
   status: boolean
   data: {
     id: number
-    user_id: string
-    name: string
+    mail_address: string
+    user_name: string
   }
-  refresh_token?: string
 }
 
 export interface BearerAuthenticationResponseError {
@@ -46,52 +42,18 @@ export interface BearerAuthenticationResponseError {
   msg: string
 }
 
-export interface FetchPhotoListResponse {
-  status: boolean
-  data: {
-    current_page: number
-    data: {
-      id: number
-      title: string
-      content: string
-      image_url: string
-      user_id: number
-      del_flg: number
-      created_at: string
-      updated_at: string
-      user: {
-        id: number
-        user_id: string
-        name: string
-        created_at: string
-        updated_at: string
-      }
-    }[]
-    first_page_url: string
-    from: number
-    last_page: number
-    last_page_url: string
-    next_page_url: string
-    path: string
-    per_page: number
-    prev_page_url?: string
-    to: number
-    total: number
-  }
-}
-
-export interface PostPhotoDataResponse {
-  status: boolean
-  msg: string
-}
 
 export default class ApiRequest {
-  static async postLoginRequest(credential: SendCredential): Promise<LoginResponseSuccess | LoginResponseError> {
+  static async postLoginRequest(credential: SendCredential): Promise<LoginResponse> {
     const result = await axios({
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       url: `${API_BASE_URL}/api/users/login`,
-      data: credential,
+      data: credential
     })
+    console.log(result)
     return result.data
   }
 
@@ -100,6 +62,7 @@ export default class ApiRequest {
       method: 'GET',
       url: `${API_BASE_URL}/api/users/logout`,
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
     })
@@ -108,10 +71,10 @@ export default class ApiRequest {
 
   static async bearerAuthentication(
     accessToken: string
-  ): Promise<BearerAuthenticationResponseSuccess | BearerAuthenticationResponseError> {
+  ): Promise<LoginResponse> {
     const result = await axios({
       method: 'GET',
-      url: `${API_BASE_URL}/api/users/`,
+      url: `${API_BASE_URL}/api/auth/`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
@@ -120,35 +83,4 @@ export default class ApiRequest {
     return result.data
   }
 
-  static async fetchPhotoLists({ page }: { page: number }): Promise<FetchPhotoListResponse> {
-    const result = await axios({
-      method: 'GET',
-      url: `${API_BASE_URL}/api/photos`,
-      params: {
-        page,
-      },
-    })
-    return result.data
-  }
-
-  static async fetchPhoto(id: number) {
-    const results = await axios({
-      method: 'GET',
-      url: `${API_BASE_URL}/api/photos/${id}`,
-    })
-    return results.data
-  }
-
-  static async postPhoto(postData: SendPhotoData, accessToken: string): Promise<PostPhotoDataResponse> {
-    const result = await axios({
-      method: 'POST',
-      url: `${API_BASE_URL}/api/photos/create`,
-      headers: {
-        'content-type': 'multipart/form-data',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      data: postData,
-    })
-    return result.data
-  }
 }

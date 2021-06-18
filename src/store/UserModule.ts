@@ -2,13 +2,13 @@ import { Mutation, Action, VuexModule, getModule, Module } from 'vuex-module-dec
 import { Store } from 'vuex'
 import { RootState } from './store'
 import UserStateType from '../modules/User'
-import ApiRequest, { SendCredential } from '../client/api'
+import ApiRequest, { LoginResponse, SendCredential } from '../client/api'
 
 @Module({ name: 'UserModuleStore', namespaced: true, stateFactory: true })
 export class UserModuleClass extends VuexModule {
   user: UserStateType = {
-    userId: '',
-    name: '',
+    mailAddress: '',
+    userName: '',
   }
 
   public isLogin = false
@@ -23,16 +23,21 @@ export class UserModuleClass extends VuexModule {
     this.isLogin = param
   }
 
-  @Action
+  @Action({ rawError: true })
   public async loginAction(credential: SendCredential) {
-    const result = await ApiRequest.postLoginRequest(credential)
+    const result: LoginResponse = await ApiRequest.postLoginRequest(credential)
     if (result.status) {
       document.cookie = 'access_token=' + result.data.access_token + ';'
       this.SET_USER({
-        userId: result.data.user_id,
-        name: result.data.name,
+        mailAddress: result.data.users.mail_address,
+        userName: result.data.users.user_name,
+        status: result.data.users.status,
+        role: result.data.users.role,
+        createdAt: result.data.users.created_at,
+        updatedAt: result.data.users.updated_at,
+        accessToken: result.data.access_token,
       })
-      this.SET_IS_LOGIN(true)
+      await this.SET_IS_LOGIN(true)
     }
   }
 
@@ -62,12 +67,17 @@ export class UserModuleClass extends VuexModule {
       }
     }
 
-    const result = await ApiRequest.bearerAuthentication(accessToken)
+    const result: LoginResponse = await ApiRequest.bearerAuthentication(accessToken)
 
     if (result.status) {
       this.SET_USER({
-        userId: result.data.user_id,
-        name: result.data.name,
+        mailAddress: result.data.users.mail_address,
+        userName: result.data.users.user_name,
+        status: result.data.users.status,
+        role: result.data.users.role,
+        createdAt: result.data.users.created_at,
+        updatedAt: result.data.users.updated_at,
+        accessToken: result.data.access_token,
       })
       this.SET_IS_LOGIN(true)
     }

@@ -5,7 +5,7 @@ import UserVuexModule from '../store/UserModule'
 
 Vue.use(Router)
 
-export function createRouter() {
+export function createRouter(): Router {
   const store = createStore()
   const router = new Router({
     routes: [
@@ -13,30 +13,19 @@ export function createRouter() {
         path: '/',
         name: 'home',
         component: async () => await import('../pages/home.vue'),
+        meta: {
+          auth: true,
+          layout: true,
+        },
       },
       {
         path: '/login',
         name: 'login',
         component: async () => await import('../pages/login.vue'),
-      },
-      {
-        path: '/secret',
-        name: 'secret',
-        component: async () => await import('../pages/secret.vue'),
-        meta: { auth: true },
-      },
-      {
-        path: '/photos',
-        component: async () => await import('../pages/photos/index.vue'),
-      },
-      {
-        path: '/photos/upload/',
-        component: async () => await import('../pages/photos/create.vue'),
-        meta: { auth: true },
-      },
-      {
-        path: '/photos/show/:id',
-        component: async () => await import('../pages/photos/show.vue'),
+        meta: {
+          auth: false,
+          layout: false,
+        },
       },
     ],
     mode: 'history',

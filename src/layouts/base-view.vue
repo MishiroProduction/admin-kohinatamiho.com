@@ -1,35 +1,52 @@
 <template>
-  <div>
-    <guest-nav v-if="!isLogin" />
-    <auth-nav v-if="isLogin" />
+  <div v-if="isLogin && isLayout">
+    <Header :title="title"/>
+    <SubHeader :sub-title="subTitle"/>
+    <div class="content-wrapper">
+      <router-view @catchTitle="renderTitle" class="content"/>
+    </div>
+    <Footer />
+  </div>
+  <div v-else>
+    <router-view />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import GuestNav from './partials/navbar/guest-nav.vue'
-import AuthNav from './partials/navbar/auth-nav.vue'
+import Header from '../components/header.vue'
+import SubHeader from '../components/subHeader.vue'
+import Footer from '../components/footer.vue'
 import UserVuexModule from '../store/UserModule'
 
 export default Vue.extend({
   name: 'BaseView',
   data() {
     return {
+      title: '',
+      subTitle: '',
       isLogin: false,
+      isLayout: false,
     }
   },
   components: {
-    GuestNav,
-    AuthNav,
+    Header,
+    SubHeader,
+    Footer,
   },
   async created() {
-    await this.loading = true
-    try {
-      await UserVuexModule(this.$store).isLoginCheckAction()
-    } catch {
-      await this.loading = false
+    if (!UserVuexModule(this.$store).isLogin) {
+      await this.$router.push('/login')
+      this.isLogin = false
+    } else {
+      this.isLogin = true
     }
-    await this.loading = false
+  },
+  methods: {
+    renderTitle(title: string, subTitle = '') {
+      this.title = title
+      this.subTitle = subTitle
+    }
   },
 })
 </script>
