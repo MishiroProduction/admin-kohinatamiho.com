@@ -1,4 +1,9 @@
 export default interface UserStateType {
-  userId: string
-  name: string
+  mailAddress: string
+  userName: string
+  status: boolean
+  role: number
+  createdAt: string
+  updatedAt: string
+  accessToken: string
 }

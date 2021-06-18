@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <h1>PJ34 管理画面</h1>
   </div>
 </template>
 
@@ -11,17 +10,14 @@ export default Vue.extend({
   name: 'Home',
   data() {
     return {
-      slide: 0,
-      sliding: false,
+      title: 'PJ34 管理画面'
     }
   },
+  async created() {
+    await this.$emit('catchTitle', this.title)
+  }
 })
 </script>
 
-<style scoped>
-.carousel {
-  width: 1080px;
-  margin: 20px auto;
-  text-align: center;
-}
+<style lang="scss" scoped>
 </style>
