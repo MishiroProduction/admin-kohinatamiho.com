@@ -9,16 +9,16 @@
       backdrop
     >
       <ul class="side-menu-list">
+        <b-link class="link" to="/">
+          <li class="menu">
+            <b-icon icon="file-earmark"></b-icon>
+            <span>Articles</span>
+          </li>
+        </b-link>
         <b-link class="link" to="/photos">
           <li class="menu">
             <b-icon icon="image-fill" />
             <span>Photos</span>
-          </li>
-        </b-link>
-        <b-link class="link" to="/">
-          <li class="menu">
-            <b-icon icon="link45deg" />
-            <span>News</span>
           </li>
         </b-link>
       </ul>

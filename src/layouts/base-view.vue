@@ -23,9 +23,17 @@ export default Vue.extend({
     AuthNav,
   },
   async created() {
-    this.isLogin = UserVuexModule(this.$store).isLogin
+    await this.loading = true
+    try {
+      await UserVuexModule(this.$store).isLoginCheckAction()
+    } catch {
+      await this.loading = false
+    }
+    await this.loading = false
   },
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
