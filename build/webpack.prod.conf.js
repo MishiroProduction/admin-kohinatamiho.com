@@ -10,7 +10,7 @@ const resolve = (dir) => {
 module.exports = merge(baseConfig, {
   mode: 'production',
   output: {
-    path: resolve('prod')
+    path: resolve('dist')
   },
   module: {
     rules: [
