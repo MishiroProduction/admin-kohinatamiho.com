@@ -10,13 +10,13 @@
             <b-input-group-prepend is-text>
               <b-icon icon="person-fill" />
             </b-input-group-prepend>
-            <b-input v-model="mailAddress" type="text" placeholder="Mail Address" :disabled="submitting" />
+            <b-input type="text" placeholder="Mail Address" v-model="mailAddress" :disabled="submitting" />
           </b-input-group>
           <b-input-group class="mb-2" size="sm">
             <b-input-group-prepend is-text>
               <b-icon icon="shield-lock-fill" />
             </b-input-group-prepend>
-            <b-input v-model="password" type="password" placeholder="Password" :disabled="submitting" />
+            <b-input type="password" placeholder="Password" v-model="password" :disabled="submitting" />
           </b-input-group>
           <div class="text-center">
             <b-button type="submit" variant="primary">LOGIN</b-button>

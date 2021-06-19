@@ -9,40 +9,45 @@ export class UserModuleClass extends VuexModule {
   user: UserStateType = {
     mailAddress: '',
     userName: '',
+    status: false,
+    role: 0,
+    createdAt: '',
+    updatedAt: '',
+    accessToken: '',
   }
 
   public isLogin = false
 
   @Mutation
-  public SET_USER(param: UserStateType) {
+  public SET_USER(param: UserStateType): void {
     this.user = param
   }
 
   @Mutation
-  public SET_IS_LOGIN(param: boolean) {
+  public SET_IS_LOGIN(param: boolean): void {
     this.isLogin = param
   }
 
   @Action({ rawError: true })
-  public async loginAction(credential: SendCredential) {
+  public async loginAction(credential: SendCredential): Promise<void> {
     const result: LoginResponse = await ApiRequest.postLoginRequest(credential)
     if (result.status) {
-      document.cookie = 'access_token=' + result.data.access_token + ';'
-      this.SET_USER({
-        mailAddress: result.data.users.mail_address,
-        userName: result.data.users.user_name,
-        status: result.data.users.status,
-        role: result.data.users.role,
-        createdAt: result.data.users.created_at,
-        updatedAt: result.data.users.updated_at,
+      document.cookie = 'access_token=' + result.data.access_token + ';max-age=1800;'
+      await this.SET_USER({
+        mailAddress: result.data.user.mail_address,
+        userName: result.data.user.user_name,
+        status: result.data.user.status,
+        role: result.data.user.role,
+        createdAt: result.data.user.created_at,
+        updatedAt: result.data.user.updated_at,
         accessToken: result.data.access_token,
       })
       await this.SET_IS_LOGIN(true)
     }
   }
 
-  @Action
-  public async logoutAction() {
+  @Action({ rawError: true })
+  public async logoutAction(): Promise<void> {
     let accessToken = ''
     const cookies = document.cookie
     const cookiesArray = cookies.split('; ')
@@ -55,8 +60,8 @@ export class UserModuleClass extends VuexModule {
     await ApiRequest.postLogoutAction(accessToken)
   }
 
-  @Action
-  public async isLoginCheckAction() {
+  @Action({ rawError: true })
+  public async isLoginCheckAction(): Promise<void> {
     let accessToken = ''
     const cookies = document.cookie
     const cookiesArray = cookies.split('; ')
@@ -68,18 +73,8 @@ export class UserModuleClass extends VuexModule {
     }
 
     const result: LoginResponse = await ApiRequest.bearerAuthentication(accessToken)
-
     if (result.status) {
-      this.SET_USER({
-        mailAddress: result.data.users.mail_address,
-        userName: result.data.users.user_name,
-        status: result.data.users.status,
-        role: result.data.users.role,
-        createdAt: result.data.users.created_at,
-        updatedAt: result.data.users.updated_at,
-        accessToken: result.data.access_token,
-      })
-      this.SET_IS_LOGIN(true)
+      await this.SET_IS_LOGIN(true)
     }
   }
 }
@@ -87,7 +82,7 @@ export class UserModuleClass extends VuexModule {
 const UserVuexModule = (store?: Store<RootState>) => getModule(UserModuleClass, store)
 export default UserVuexModule
 
-export function registerUserModule(store: Store<RootState>) {
+export function registerUserModule(store: Store<RootState>): void {
   if (!store.state.UserModuleStore) {
     store.registerModule('UserModuleStore', UserModuleClass)
   }

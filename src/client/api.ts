@@ -11,7 +11,7 @@ export interface LoginResponse {
   message: string
   errors: null | Record<string, unknown>
   data: {
-    users: {
+    user: {
       id: number
       mail_address: string
       user_name: string
@@ -53,7 +53,6 @@ export default class ApiRequest {
       url: `${API_BASE_URL}/api/users/login`,
       data: credential
     })
-    console.log(result)
     return result.data
   }
 
@@ -74,7 +73,7 @@ export default class ApiRequest {
   ): Promise<LoginResponse> {
     const result = await axios({
       method: 'GET',
-      url: `${API_BASE_URL}/api/auth/`,
+      url: `${API_BASE_URL}/api/users/auth/`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
