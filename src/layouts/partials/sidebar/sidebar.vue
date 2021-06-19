@@ -32,7 +32,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.side-menu-list {
+.sidebar {
   text-align:left;
   position: -webkit-sticky;
   position: sticky;
@@ -40,47 +40,43 @@ export default Vue.extend({
   height: 800px;
   top: 0;
   left: 0;
-  width: 15%;
+  width: 20%;
   background: #2c3e50;
-  .site-top{
-    color: #fff;
-    display: block;
-    margin: 10px;
-    padding: 3px;
-  }
-  .acd-check{
-    display: none;
-  }
-  .acd-label{
-    color: #fff;
-    display: block;
-    margin: 10px;
-    margin-bottom: 1px;
-    padding: 3px;
-  }
-  .menu-child{
-    border: 1px solid #333;
-    height: 0;
-    opacity: 0;
-    padding: 0 5px;
-    transition: .5s;
-    visibility: hidden;
-  }
-  .acd-check:checked + .acd-label + .menu-child{
-    height: 10%;
-    opacity: 1;
-    padding: 10px;
-    visibility: visible;
-  }
   .side-menu-list {
     padding: 0;
     margin: 10px auto;
     .menu {
       margin: 10px auto;
+      .acd-check{
+        display: none;
+      }
+      .acd-label{
+        color: #fff;
+        display: block;
+        margin: 10px;
+        padding: 3px;
+      }
+      .acd-check:checked + .acd-label + .menu-child{
+        height: 10%;
+        opacity: 1;
+        padding: 10px;
+        visibility: visible;
+      }
+      .link {
+        text-decoration: none;
+        color: #fff;
+        font-size: 15px;
+      }
       .category-name {
         color: #fff;
       }
       .menu-child {
+        border: 1px solid #333;
+        height: 0;
+        opacity: 0;
+        padding: 0 5px;
+        transition: .5s;
+        visibility: hidden;
         .link {
           text-decoration: none;
           color: #fff;
